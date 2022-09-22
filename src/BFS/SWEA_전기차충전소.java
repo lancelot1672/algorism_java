@@ -26,7 +26,7 @@ public class SWEA_전기차충전소 {
 			visited = new boolean[32][32];
 			houseList = new ArrayList<>();
 			list = new ArrayList<>();
-			
+			max = 0;
 			for(int n=1; n<=N; n++) {
 				//집의 좌표 , 거리
 				int j = sc.nextInt() + 15;
@@ -38,9 +38,12 @@ public class SWEA_전기차충전소 {
 			}// end input
 			// house 갯수 만큼 checked;
 
-			print();
+			//print();
 			comb(0, 0);		// n개중 2개를 뽑아서 진행
-			System.out.println(max);
+			if(max == 0) {
+				max = -1;
+			}
+			System.out.println("#" + tc + " " + max);
 		}
 	}
 	static House[] output = new House[2];
@@ -73,6 +76,7 @@ public class SWEA_전기차충전소 {
 				
 				int dist = Math.abs(output[1].i - h.i) + Math.abs(output[1].j - h.j);
 				if(h.d >= dist) {
+					cnt1++;
 					checked[i] = true;
 				}
 			}
@@ -82,7 +86,7 @@ public class SWEA_전기차충전소 {
 					return;
 				}
 			}
-			max = 2;
+			max = Math.max(max, cnt1);
 			return;
 		}
 		if(idx == list.size()) {
