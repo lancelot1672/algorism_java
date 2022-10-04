@@ -18,7 +18,6 @@ public class S보급로 {
 		int T = Integer.parseInt(br.readLine());
 		
 
-		
 		for(int tc=1; tc<=T; tc++) {
 			N = Integer.parseInt(br.readLine());
 			arr = new int[N][N];
@@ -36,35 +35,66 @@ public class S보급로 {
 				Arrays.fill(D[i], Integer.MAX_VALUE);
 			}
 			D[0][0] = 0;
-			
-			Queue<Point> q = new LinkedList<>();
-			boolean[][] visited = new boolean[N][N];
-			q.add(new Point(0,0));
-			visited[0][0] = true;
-			
-			while(!q.isEmpty()) {
-				Point now = q.poll();
-				
-				for(int d=0; d<4; d++) {
-					int nexti = now.i + di[d];
-					int nextj = now.j + dj[d];
-					
-					if(nexti < 0 || nexti >= N || nextj < 0 || nextj >= N) {
-						continue;
-					}
-					if(visited[nexti][nextj]) {
-						continue;
-					}
-					if(D[nexti][nextj] > arr[nexti][nextj] + D[now.i][now.j]) {
-						D[nexti][nextj] = arr[nexti][nextj] + D[now.i][now.j];
-						visited[nexti][nextj] = true;
-						q.add(new Point(nexti, nextj));
-					}
-				}
-			}
+//			
+//			for(int i=0; i<N; i++) {
+//				for(int j=0; j<N; j++) {
+//					for(int d=0; d<4; d++) {
+//						int nexti = i + di[d];
+//						int nextj = j + dj[d];
+//						
+//						if(nexti < 0 || nexti >= N || nextj < 0 || nextj >= N) {
+//							continue;
+//						}
+//						if(D[nexti][nextj] > D[i][j] + arr[nexti][nextj]) {
+//							D[nexti][nextj] = D[i][j] + arr[nexti][nextj];
+//						}
+//					}
+//				}
+//			}
+//			dfs(0,0);
+			bfs();
 			System.out.printf("#%d %d\n", tc, D[N-1][N-1]);
 		}// end tc
 		
+	}
+	static void bfs() {
+		Queue<Point> q = new LinkedList<>();
+		q.add(new Point(0,0));
+		
+		while(!q.isEmpty()) {
+			Point now = q.poll();
+			
+			for(int d=0; d<4; d++) {
+				int nexti = now.i + di[d];
+				int nextj = now.j + dj[d];
+				
+				if(nexti < 0 || nexti >= N || nextj < 0 || nextj >= N) {
+					continue;
+				}
+				if(D[nexti][nextj] > D[now.i][now.j] + arr[nexti][nextj]) {
+					D[nexti][nextj] = D[now.i][now.j] + arr[nexti][nextj];
+					q.add(new Point(nexti, nextj));
+				}
+			}
+		}
+		
+	}
+	static void dfs(int i, int j) {
+		if(i == N-1 && j == N-1) {
+			return;
+		}
+		for(int d=0; d<4; d++) {
+			int nexti = i + di[d];
+			int nextj = j + dj[d];
+			
+			if(nexti < 0 || nexti >= N || nextj < 0 || nextj >= N) {
+				continue;
+			}
+			if(D[nexti][nextj] > D[i][j] + arr[nexti][nextj]) {
+				D[nexti][nextj] = D[i][j] + arr[nexti][nextj];
+				dfs(nexti, nextj);
+			}
+		}
 	}
 	static class Point{
 		int i;
