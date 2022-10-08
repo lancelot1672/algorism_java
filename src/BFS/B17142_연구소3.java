@@ -47,12 +47,11 @@ public class B17142_연구소3 {
 	}
 	static void comb(int idx, int cnt) {
 		if(cnt == M) {
-			for(int i=0; i<M; i++) {
-				System.out.println(output[i]);
-			}
+//			for(int i=0; i<M; i++) {
+//				System.out.println(output[i]);
+//			}
 			int room = roomCnt;
 			int re = bfs(output, room);
-			System.out.println(re);
 			if(re != -1) {
 				min = Math.min(min, re);
 			}
@@ -78,10 +77,14 @@ public class B17142_연구소3 {
 		}
 		int time = 0;
 		while(!q.isEmpty()) {
+			if(room == 0) {
+				return time;
+			}
+			
 			int size = q.size();
 			for(int s=0; s<size; s++) {
 				Point now = q.poll();
-				
+
 				for(int d=0; d<4; d++) {
 					int nexti = now.i + di[d];
 					int nextj = now.j + dj[d];
@@ -100,7 +103,10 @@ public class B17142_연구소3 {
 						visited[nexti][nextj] = true;
 						q.add(new Point(nexti, nextj));
 						room--;
+
+
 					}
+
 				}
 			}
 			time++;
