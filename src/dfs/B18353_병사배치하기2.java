@@ -1,8 +1,7 @@
-package dfs;
+package DFS;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class B18353_병사배치하기2 {

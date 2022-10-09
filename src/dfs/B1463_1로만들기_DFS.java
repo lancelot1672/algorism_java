@@ -1,4 +1,4 @@
-package dfs;
+package DFS;
 import java.util.Scanner;
 
 public class B1463_1로만들기_DFS {

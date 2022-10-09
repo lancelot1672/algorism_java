@@ -48,7 +48,7 @@ public class S1767_프로세서_백트래킹 {
 			
 			func(0, 0, copy);
 //			System.out.println(connect);
-			System.out.println("#" + tc + " " + max);
+			System.out.println("#" + tc + " " + max + " " + connect);
 		}
 	}
 	static int[][] copy;
