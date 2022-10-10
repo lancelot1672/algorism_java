@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
@@ -16,6 +17,9 @@ public class B4991_로봇청소기 {
 	static boolean[] visit;
 	static boolean isClean;
 	static int min;
+	static int[][] adjMatrix;
+	static ArrayList<Node>[] adjList;
+	static boolean [] visited2;
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
@@ -29,12 +33,10 @@ public class B4991_로봇청소기 {
 				break;
 			}
 			map = new char[N][M];
-			v = new boolean[N][M];
 			
 			list = new ArrayList<>();
-			
-			isClean = true;
 			min = Integer.MAX_VALUE;
+			isClean = true;
 			
 			for(int i=0; i<N; i++) {
 				char[] arr = br.readLine().toCharArray();
@@ -43,75 +45,69 @@ public class B4991_로봇청소기 {
 					if(map[i][j] == 'o') {
 						Cleaner = new Point(i,j);
 					}
+				}
+			}
+			for(int i=0; i<N; i++) {
+				for(int j=0; j<M; j++) {
 					if(map[i][j] == '*') {
 						list.add(new Point(i,j));
 					}
 				}
+			}// end Input
+			list.add(0, Cleaner);
+			map[Cleaner.i][Cleaner.j] = '*';
+
+			adjMatrix = new int[list.size()][list.size()];
+			for(int i=0; i<list.size(); i++) {
+				if(isClean)
+					bfs(i);
 			}
-			visit = new boolean[list.size()];
-			dfs(0, 0);
-			if(!isClean) {
-				System.out.println(-1);
-			}else {
+
+			visited2 = new boolean[list.size()];
+
+			dfs(0,0,0);
+			if(isClean) {
 				System.out.println(min);
+			}else {
+				System.out.println(-1);
 			}
-			
+
 		}
 	}
-	static void dfs(int cnt, int sum) {
-		if(min <= sum) {	// 더 길어지면 해볼 필요가 없지
-			return;
-		}
-		if(cnt == list.size()) {
+	static void dfs(int idx, int cnt, int sum) {
+		if(cnt == list.size() - 1) {
 			min = Math.min(min, sum);
-			isClean = true;
 			return;
 		}
 		
-		for(int i=0; i<list.size(); i++) {
-			if(!isClean) {
-				return;
-			}
-			if(!visit[i]) {		//먼지 체크
-				int result = bfs(i);
-				Point now = Cleaner;
-				Cleaner = list.get(i);
-				//System.out.println(result);
-				if(result == -1) {		// 못가면 끝
-					isClean = false;
-					return;
-				}else {
-					map[Cleaner.i][Cleaner.j] = '.';
-					visit[i] = true;
-					dfs(cnt+1, sum+result);
-					visit[i] = false;
-					map[Cleaner.i][Cleaner.j] = '*';
-				}
-				Cleaner = now;
+		for(int i=1; i<list.size(); i++) {
+			if(!visited2[i]) {
+				visited2[i] = true;
+				dfs(i, cnt+1, sum + adjMatrix[idx][i]);
+				visited2[i] = false;
 			}
 		}
-
 	}
 	static int[] di = {1, -1, 0, 0};
 	static int[] dj = {0, 0, 1, -1};
 	
-	static int bfs(int idx) {
+	static void bfs(int idx) {
 		Queue<Point> q = new LinkedList<>();
 		boolean[][] visited = new boolean[N][M];
-		q.add(Cleaner);	// 진송청소기 위치로 부터
-		visited[Cleaner.i][Cleaner.j] = true;
+		Point start = list.get(idx);
+		q.add(start);	// 진송청소기 위치로 부터
+		visited[start.i][start.j] = true;
 		
 		//먼지 위치
 		Point dirty = list.get(idx);
 		
 		int dist = 0;
+		int cnt = 0;
 		while(!q.isEmpty()) {
 			int size = q.size();
 			for(int s=0; s<size; s++) {
 				Point now = q.poll();
-				if(map[now.i][now.j] == '*') {
-					return dist;
-				}
+
 				for(int d=0; d<4; d++) {
 					int nexti = now.i + di[d];
 					int nextj = now.j + dj[d];
@@ -122,6 +118,19 @@ public class B4991_로봇청소기 {
 					if(visited[nexti][nextj]) {
 						continue;
 					}
+					if(map[nexti][nextj] == '*') {
+						// a 부터 b와의 거리
+							for(int i=0; i<list.size(); i++) {
+								Point p = list.get(i);
+								if(p.i == nexti && p.j == nextj) {
+									cnt++;
+									adjMatrix[idx][i] = dist+1;
+									adjMatrix[i][idx] = dist+1;
+								}
+							}
+						
+					}
+					
 					if(map[nexti][nextj] != 'x') {	// 벽은 못가고..
 						q.add(new Point(nexti, nextj));
 						visited[nexti][nextj] = true;
@@ -132,7 +141,9 @@ public class B4991_로봇청소기 {
 			
 		}
 		// 못가면?
-		return -1;
+		if(cnt != list.size() -1) {
+			isClean = false;
+		}
 	}
 	static void print() {
 		for(int i=0; i<N; i++) {
@@ -150,5 +161,13 @@ public class B4991_로봇청소기 {
 			this.j = j;
 		}
 		
+	}
+	static class Node{
+		int n;
+		int w;
+		public Node(int n, int w) {
+			this.n = n;
+			this.w = w;
+		}
 	}
 }

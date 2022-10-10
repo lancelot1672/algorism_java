@@ -34,11 +34,16 @@ public class B1025_제곱수찾기 {
 				for(int d=0; d<4; d++) {
 					//i 기준 더 가는 경우
 					for(int x=1; x<N; x++) {
-						forward(i, j, d, x, true);
+						forward(i, j, d, x, 1);
 					}
 					// j 기준 더 가는 경우
 					for(int x=1; x<M; x++) {
-						forward(i, j, d, x, false);
+						forward(i, j, d, x, 2);
+					}
+					
+					// 둘다 x점프
+					for(int x=1; x<Math.max(M, N); x++) {
+						forward(i, j, d, x, 3);
 					}
 				}
 			}
@@ -69,7 +74,7 @@ public class B1025_제곱수찾기 {
 	static int[] di = {0, 1, 1, -1};
 	static int[] dj = {1, 1, 0, +1};
 	
-	static void forward(int i, int j, int d, int x, boolean ij) {
+	static void forward(int i, int j, int d, int x, int ij) {
 		int nowi = i;
 		int nowj = j;
 		int nexti = 0;
@@ -77,11 +82,14 @@ public class B1025_제곱수찾기 {
 		String num = map[i][j];
 		set.add(Integer.parseInt(num));
 		while(true) {
-			if(ij) {
+			if(ij == 1) {
 				nexti = nowi + di[d] * x;
 				nextj = nowj + dj[d];
-			}else {
+			}else if(ij == 2){
 				nexti = nowi + di[d];
+				nextj = nowj + dj[d] * x;
+			}else {
+				nexti = nowi + di[d] * x;
 				nextj = nowj + dj[d] * x;
 			}
 			

@@ -1,4 +1,4 @@
-package dfs;
+package DFS;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
