@@ -32,6 +32,7 @@ public class B17143_낚시왕_교수님 {
 		while(true) {
 			fisher++;
 			if(fisher > C) break;
+			print();
 			fishing();	// 가까운 상어 낚시
 			move();
 		}
@@ -114,5 +115,18 @@ public class B17143_낚시왕_교수님 {
 		}
 		
 		
+	}
+	static void print() {
+		System.out.println("-------------------");
+		for(int i=1; i<=R; i++) {
+			for(int j=1; j<=C; j++) {
+				if(start[i][j] == null) {System.out.print("0");}
+				else {
+					System.out.print(start[i][j].size + " ");
+				}
+
+			}
+			System.out.println();
+		}
 	}
 }	
