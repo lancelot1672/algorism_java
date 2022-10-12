@@ -83,14 +83,14 @@ public class B19236_청소년상어 {
 
 				}	
 			}else {	//범위 벗어나면 끝.
-				max = Math.max(num, max);
-				System.out.println(max);
-				return;
+				break;
 			}
 			
 			nowi = nexti;
 			nowj = nextj;
 		}
+		max = Math.max(num, max);
+		System.out.println(max);
 	}
 	static void moveFish() {
 		PriorityQueue<Fish> pq = new PriorityQueue<>((f1, f2) -> f1.n - f2.n);
