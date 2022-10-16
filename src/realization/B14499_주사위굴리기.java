@@ -35,8 +35,8 @@ public class B14499_주사위굴리기 {
 			K[i] = Integer.parseInt(st.nextToken());
 		}
 		int nowTop = 1;	// 주사위 초기 윗면
-		int nowi = y;	//주사위 초기 좌표
-		int nowj = x;
+		int nowi = x;	//주사위 초기 좌표
+		int nowj = y;
 		for(int i=0; i<k; i++) {
 			int order = K[i];
 			
@@ -47,151 +47,52 @@ public class B14499_주사위굴리기 {
 			if(nexti < 0 || nexti >= N || nextj < 0 || nextj >= M) continue;
 			
 			//안나가면 수행해
-			//바닥 가져와~
-			int bottomNum = getBottomNum(nowTop, order);
+			rollDice(order);
 			
+			//복사
 			if(map[nexti][nextj] == 0) {
-				map[nexti][nextj] = dice[bottomNum];
+				map[nexti][nextj] = dice[6];
 			}else {
-				dice[bottomNum] = map[nexti][nextj];
+				dice[6] = map[nexti][nextj];
+				map[nexti][nextj] = 0;
 			}
 			
-			nowTop = getTopNum(bottomNum);
 			//윗면에 수 출력
-			System.out.println(dice[nowTop]);
+			System.out.println(dice[1]);
 			
 			nowi = nexti;
 			nowj = nextj;
 		}
 	}
-	static int getTopNum(int bottom) {
-		int num = 0;
-		switch (bottom) {
-		case 1:
-			num = 6;
-			break;
-		case 2:
-			num = 5;
-			break;
-		case 3:
-			num = 4;
-			break;
-		case 4:
-			num = 3;
-			break;
-		case 5:
-			num = 2;
-			break;
-		case 6:
-			num = 1;
-			break;
-
-		}
-		return num;
-	}
 	
 	// 주사위 위의 인덱스와 돌리는 방향으로 조사
-	static int getBottomNum(int top, int d) {
-		int num = 0;
-		switch (top) {
-		case 1:
-			switch (d) {
-			case 1:	//우측
-				num = 3;
-				break;
-			case 2:	//좌측
-				num = 4;
-				break;
-			case 3:	//북측
-				num = 2;
-				break;
-			case 4:	//남측
-				num = 5;
-				break;
-			}
+	static void rollDice(int d) {
+		int temp = dice[1];
+		switch (d) {
+		case 1:	//동쪽으로 돌려
+			dice[1] = dice[4];
+			dice[4] = dice[6];
+			dice[6] = dice[3];
+			dice[3] = temp;
 			break;
-		case 2:
-			switch (d) {
-			case 1:	//우측
-				num = 3;
-				break;
-			case 2:	//좌측
-				num = 4;
-				break;
-			case 3:	//북측
-				num = 6;
-				break;
-			case 4:	//남측
-				num = 1;
-				break;
-			}
+		case 2:	 //서쪽으로 돌려
+			dice[1] = dice[3];
+			dice[3] = dice[6];
+			dice[6] = dice[4];
+			dice[4] = temp;
 			break;
 		case 3:
-			switch (d) {
-			case 1:	//우측
-				num = 6;
-				break;
-			case 2:	//좌측
-				num = 1;
-				break;
-			case 3:	//북측
-				num = 2;
-				break;
-			case 4:	//남측
-				num = 5;
-				break;
-			}
+			dice[1] = dice[5];
+			dice[5] = dice[6];
+			dice[6] = dice[2];
+			dice[2] = temp;
 			break;
 		case 4:
-			switch (d) {
-			case 1:	//우측
-				num = 1;
-				break;
-			case 2:	//좌측
-				num = 6;
-				break;
-			case 3:	//북측
-				num = 2;
-				break;
-			case 4:	//남측
-				num = 5;
-				break;
-			}
-			break;
-		case 5:
-			switch (d) {
-			case 1:	//우측
-				num = 3;
-				break;
-			case 2:	//좌측
-				num = 4;
-				break;
-			case 3:	//북측
-				num = 1;
-				break;
-			case 4:	//남측
-				num = 6;
-				break;
-			}
-			break;
-		case 6:
-			switch (d) {
-			case 1:	//우측
-				num = 3;
-				break;
-			case 2:	//좌측
-				num = 4;
-				break;
-			case 3:	//북측
-				num = 5;
-				break;
-			case 4:	//남측
-				num = 2;
-				break;
-			}
+			dice[1] = dice[2];
+			dice[2] = dice[6];
+			dice[6] = dice[5];
+			dice[5] = temp;
 			break;
 		}
-		
-		return num;
 	}
 }

@@ -38,12 +38,12 @@ public class SWEA_전기차충전소 {
 			}// end input
 			// house 갯수 만큼 checked;
 
-			//print();
-			comb(0, 0);		// n개중 2개를 뽑아서 진행
-			if(max == 0) {
-				max = -1;
-			}
-			System.out.println("#" + tc + " " + max);
+			print();
+			//comb(0, 0);		// n개중 2개를 뽑아서 진행
+//			if(max == 0) {
+//				max = -1;
+//			}
+//			System.out.println("#" + tc + " " + max);
 		}
 	}
 	static House[] output = new House[2];
