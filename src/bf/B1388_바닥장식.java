@@ -36,20 +36,20 @@ public class B1388_바닥장식 {
 	static void dfs(int i, int j, char shape) {
 		int nexti = 0;
 		int nextj = 0;
-		if(shape == '-') {
+		if(shape == '-') {	//옆으로 가보고
 			nexti = i + 0;
 			nextj = j + 1;
 			if(nextj >= M) return;
-		}else {
+		}else {				//아래로 가볼것이여
 			nexti = i + 1;
 			nextj = j + 0;
 			if(nexti >= N) return;
 		}
 		
 		//만약 같은 문양
-		if(shape == map[nexti][nextj]) {
-			visited[nexti][nextj] = true;
-			dfs(nexti, nextj, shape);
+		if(shape == map[nexti][nextj]) {	
+			visited[nexti][nextj] = true;	//방문체크
+			dfs(nexti, nextj, shape);	//그 다음 연결된 문양으로 가
 		}else {
 			return;
 		}

@@ -25,7 +25,7 @@ public class B14225_부분수열의합 {
 		}
 		subset(0);
 		//System.out.println(set.toString());
-		for(int i=1; i<=100000 * 20; i++) {
+		for(int i=1; i<=100000 * 20; i++) {	//여기서 여러번 틀림 ㅠ
 			if(!set.contains(i)) {
 				System.out.println(i);
 				return;
@@ -35,7 +35,7 @@ public class B14225_부분수열의합 {
 	static void subset(int idx) {
 		if(idx == N) {
 			int sum = 0;
-			for(int i=0; i<N; i++) {
+			for(int i=0; i<N; i++) {	//부분 집합의 합
 				if(selected[i]) {
 					//System.out.print(s[i] + " ");
 					sum += s[i];
