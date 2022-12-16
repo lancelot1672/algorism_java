@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class S2382_미생물격리 {
+public class S2382_미생물격리_t2 {
 	static Point[][] map1;
 	static Point[][] map2;
 	static Point[][] dist;
@@ -35,87 +35,87 @@ public class S2382_미생물격리 {
 				 int d = Integer.parseInt(st.nextToken());
 				 
 				 map1[i][j] = new Point(cnt, d);
-			}
+			}// end input
 			
-			for(int t=0; t<M; t++) {
+			for(int m=0; m<M; m++) {
 				map2 = new Point[N][N];
 				dist = new Point[N][N];
-				print();
-				//미생물 이동.
+				
 				for(int i=0; i<N; i++) {
 					for(int j=0; j<N; j++) {
-						if(map1[i][j] != null) {
-							Point now = map1[i][j];
+						if(map1[i][j] == null) continue;	//미생물 없으면 패스
+						
+						int nexti = i + di[map1[i][j].d];
+						int nextj = j + dj[map1[i][j].d];
+						
+						if(nexti == 0 || nexti == N-1 || nextj == 0 || nextj == N-1) {
+							//여기는 미생물 구역입니다.
+							map1[i][j].cnt = map1[i][j].cnt / 2;
+							
+							//방향 바꾸세요
+							map1[i][j].d = turn(map1[i][j].d);
+						}
+						// 여기는 일반 구역입니다.
+						// 방향 먼저 매핑
+						if(dist[nexti][nextj] != null) {	// 이미 온 놈이 있네?
+							if(dist[nexti][nextj].cnt < map1[i][j].cnt) {	//내가 더 커 방향 내걸로 해
+								dist[nexti][nextj] = new Point(map1[i][j].cnt, map1[i][j].d);
+							}
+						}else {	//내가 처음이야?
+							dist[nexti][nextj] = new Point(map1[i][j].cnt, map1[i][j].d);
+						}
+						
+						if(map2[nexti][nextj] != null) {	// 이미 온 놈이 있네?
+							map2[nexti][nextj].cnt += map1[i][j].cnt;	// 합치기
 							map1[i][j] = null;
 							
-							int nexti = i + di[now.d];
-							int nextj = j + dj[now.d];
-							
-							// 가장자리 가면
-							if(nexti == 0 || nexti == N-1 || nextj == 0 || nextj == N-1) {
-								now.cnt = now.cnt / 2;
-								switch (now.d) {
-								case 1:
-									now.d = 2;
-									break;
-								case 2:
-									now.d = 1;
-									break;
-								case 3:
-									now.d = 4;
-									break;
-								case 4:
-									now.d = 3;
-									break;
-								}
-							}
-							//이동했을 때 누군가 있으면??
-							if(map2[nexti][nextj] != null) {
-								Point next = map2[nexti][nextj];
-								if(next.cnt > now.cnt) {	//원래 있던 놈이 더 큰 군집
-									next.cnt += now.cnt;	//군집 합쳐짐
-									
-								}else {
-									now.cnt += next.cnt;
-									map2[nexti][nextj] = now;	// 내것의 방향으로 바뀜
-									
-								}
-								//방향 체크 다시
-								if(dist[nexti][nextj].cnt > now.cnt) {
-									dist[nexti][nextj] = new Point(next.cnt, next.d);	// 큰놈의 cnt와 방향 저장.
-								}else {
-									dist[nexti][nextj] = new Point(now.cnt, now.d);
-								}
-								
-								
-							}else {	//없으면 내가 짱
-								map2[nexti][nextj] = now;
-								dist[nexti][nextj] = new Point(now.cnt, now.d);
-							}
+						}else {
+							map2[nexti][nextj] = new Point(map1[i][j].cnt, map1[i][j].d);
+							map1[i][j] = null;
 						}
-					} // end i
-				} // end j
-				// map2 -> map1
+						//끝
+						
+					}
+				}// end 이중 포문
+				//방향 조정해
+				for(int i=0; i<N; i++) {
+					for(int j=0; j<N; j++) {
+						if(map2[i][j] != null && dist[i][j] != null) {
+							map2[i][j].d = dist[i][j].d;
+						}
+					}
+				}
 				for(int i=0; i<N; i++) {
 					for(int j=0; j<N; j++) {
 						if(map2[i][j] != null) {
-							map2[i][j].d = dist[i][j].d;
 							map1[i][j] = map2[i][j];
 						}
 					}
-				}// end  copy
-
-			}//end t
+				}
+				///////////////////////////////////////////////// end M
+			}
+			//다 돌았어??
 			for(int i=0; i<N; i++) {
 				for(int j=0; j<N; j++) {
-					if(map1[i][j] != null) {
+					if(map1[i][j] != null)
 						ans += map1[i][j].cnt;
-					}
 				}
-			}// end  copy
-			print();
+			}	
 			System.out.println("#" + tc + " " + ans);
 		}
+	}
+	static int turn(int d) {
+		switch (d) {
+		case 1:
+			return 2;
+		case 2:
+			return 1;
+		case 3:
+			return 4;
+		case 4:
+			return 3;
+		}
+		return -1;
 	}
 	static int[] di = {0, -1, 1, 0, 0};
 	static int[] dj = {0, 0, 0, -1, 1};
