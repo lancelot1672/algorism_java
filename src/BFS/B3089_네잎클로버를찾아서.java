@@ -2,13 +2,12 @@ package BFS;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public class B3089_네잎클로버를찾아서 {
 	static int N,M;
-	static int[][] map;
-	static char[] order;
-	static Point sung;
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
@@ -16,70 +15,113 @@ public class B3089_네잎클로버를찾아서 {
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
 		
-		map = new int[201][201];
+		HashMap<Integer, ArrayList<Integer>> mapX = new HashMap<>();
+		HashMap<Integer, ArrayList<Integer>> mapY = new HashMap<>();
+		
 		for(int n=0; n<N; n++) {
 			st = new StringTokenizer(br.readLine());
-			int j = Integer.parseInt(st.nextToken()) + 100;
-			int i = Integer.parseInt(st.nextToken()) + 100;
+			int X = Integer.parseInt(st.nextToken());
+			int Y = Integer.parseInt(st.nextToken());
 			
-			map[i][j] = 1;
+			if(mapX.get(X) == null) {
+				ArrayList<Integer> list = new ArrayList<>();
+				list.add(Y);
+				mapX.put(X, list);
+			}else {
+				ArrayList<Integer> list = mapX.get(X);
+				list.add(Y);
+				mapX.put(X, list);
+			}
+			
+			if(mapY.get(Y) == null) {
+				ArrayList<Integer> list = new ArrayList<>();
+				list.add(X);
+				mapY.put(Y, list);
+			}else {
+				ArrayList<Integer> list = mapY.get(Y);
+				list.add(X);
+				mapY.put(Y, list);
+			}
+			
 		}
-		order = br.readLine().toCharArray();
-		sung = new Point(0, 0);
+		// end input
+		char[] orderList = br.readLine().toCharArray();
 		
-		for(char o : order) {
-			switch (o) {
-			case 'U':
-				find(sung, 0);
-				break;
-			case 'D':
-				find(sung, 1);
-				break;
-			case 'R':
-				find(sung, 3);
-				break;
-			case 'L':
-				find(sung, 2);
-				break;
+		int nowX = 0, nowY = 0;
+		for(char order : orderList) {
+			if(order == 'U') {
+				ArrayList<Integer> list = mapX.get(nowX);
+				//System.out.println(list.toString());
+				int minDist = Integer.MAX_VALUE;
+				int minY = 0;
+				
+				for(int next : list) {
+					if(next > nowY) {		// 위로 가는거면 더 커야함.
+						int dist = Math.abs(nowY - next);
+						if(dist == 0) continue;
+						if(minDist > dist) { // 더 가까운게 있네?
+							minY = next;
+							minDist = dist;
+						}
+					}
+				}	// end list
+				nowY = minY;
+			}// end U
+			if(order == 'D') {
+				ArrayList<Integer> list = mapX.get(nowX);
+				//System.out.println(list.toString());
+				int minDist = Integer.MAX_VALUE;
+				int minY = 0;
+				
+				for(int next : list) {
+					if(next < nowY) {		// 아래로 가는거면 더 작아야함.
+						int dist = Math.abs(nowY - next);
+						if(dist == 0) continue;
+						if(minDist > dist) { // 더 가까운게 있네?
+							minY = next;
+							minDist = dist;
+						}
+					}
+				}	// end list
+				nowY = minY;
 			}
-			
-		}
-		System.out.println(sung.i + " " + sung.j);
-	}
-	static int[] di = {-1, 1, 0, 0};	// 0 1 2 3
-	static int[] dj = {0, 0, -1, 1};	//U D L R
-	
-	static void find(Point now, int d) {
-		int nexti = 0;
-		int nextj = 0;
-		int nowi = now.i;
-		int nowj = now.j;
-		while(true) {
-			
-			nexti = nowi + di[d];
-			nextj = nowj + dj[d];
-			
-			if(nexti <= -100000 || nexti >= 100000 || nextj <= -100000 || nextj >= 100000) {
-				return;
+			if(order == 'L') { // 왼쪽으로 가는경우
+				ArrayList<Integer> list = mapY.get(nowY);
+				//System.out.println(list.toString());
+				int minDist = Integer.MAX_VALUE;
+				int minX = 0;
+				
+				for(int next : list) {
+					if(next < nowX) {		// 왼쪽으로 가는경우 나보다 작아야함.
+						int dist = Math.abs(nowX - next);
+						if(dist == 0) continue;
+						if(minDist > dist) { // 더 가까운게 있네?
+							minX = next;
+							minDist = dist;
+						}
+					}
+				}	// end list
+				nowX = minX;
 			}
-			if(map[nexti][nextj] == 1) {
-				// 최초 발견!!!
-				sung.i = nexti;
-				sung.j = nextj;
-				break;
+			if(order == 'R') { // 오른쪽으로 가는경우
+				ArrayList<Integer> list = mapY.get(nowY);
+				//System.out.println(list.toString());
+				int minDist = Integer.MAX_VALUE;
+				int minX = 0;
+				
+				for(int next : list) {
+					if(next > nowX) {		// 오른쪽으로 가는 경우 다음게 더 커야함
+						int dist = Math.abs(nowX - next);
+						if(dist == 0) continue;
+						if(minDist > dist) { // 더 가까운게 있네?
+							minX = next;
+							minDist = dist;
+						}
+					}
+				}	// end list
+				nowX = minX;
 			}
-			
-			nowi = nexti;
-			nowj = nextj;
 		}
-	}
-	static class Point{
-		int i;
-		int j;
-		public Point(int i, int j) {
-			this.i = i;
-			this.j = j;
-		}
-		
+		System.out.println(nowX + " " + nowY);
 	}
 }
