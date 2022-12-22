@@ -11,8 +11,7 @@ public class PRO_더_맵게 {
 	        
 	        // 스코빌 지수가 K를 넘지 않는 음식의 갯수 세기
 	        int count = 0;
-	       int[] answer = {};
-	       answer = new int[]{2,2};
+
 	        // PQ에 넣기
 	        for(int scov : scoville){
 	            if(K > scov) count++;
