@@ -24,27 +24,26 @@ public class 프린터 {
         	pq.add(num);
         	print.add(cnt++);
         }
+        // 내림차순 정렬
         Collections.sort(list, Collections.reverseOrder());
         
-        System.out.println(list.toString());
         while(!pq.isEmpty()) {
-        	int nowPri = list.get(0);
+        	int nowPri = list.get(0);	// 맨 첫번째 우선순위
         	
         	int priority = pq.poll();	// 검사해 볼 우선 순위
-        	int printNum = print.poll();	// 인덱스
+        	int printNum = print.poll();	// 프린트 문서 인덱스
         	
         	if(nowPri == priority) {	// 지금 프린트 될 문서니?
         		answer++;
-        		list.remove(0);
+        		list.remove(0);	// 다음 우선순위 보자
         		if(printNum == location) {	// 내가 요청한 문서니? 끝
         			break;
         		}
-        	}else {
+        	}else {	// 지금 우선순위가 아니면 뒤로 다시 넣기
         		pq.add(priority);
         		print.add(printNum);
         	}
         }
-        System.out.println(answer);
         return answer;
     }
 }

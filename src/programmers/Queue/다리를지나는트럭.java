@@ -33,7 +33,7 @@ public class 다리를지나는트럭 {
         	if(i < truck_weights.length && total_weight + truck_weights[i] <= weight) {
         		//현재 총 트럭 무게 + 다음 트럭 무게 <= 올라갈 수 있는 무게
         		bridge.add(new Truck(nowTime, truck_weights[i]));
-        		total_weight += truck_weights[i];
+        		total_weight += truck_weights[i];	// 다리에 올라간 트럭 무게
         		i++;	//다음거 봐야지.
         	}
         	nowTime++;	//시간 증가
